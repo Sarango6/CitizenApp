@@ -1,98 +1,108 @@
-import * as ImagePicker from "expo-image-picker";
-import { useContext, useState } from "react";
-import { Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { IssuesContext } from "./IssuesContext";
+// screens/ProfileScreen.js
+import { useContext, useState } from 'react';
+import { FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { IssuesContext } from './IssuesContext';
 
 export default function ProfileScreen({ navigation }) {
-  const { currentUser, updateUser } = useContext(IssuesContext);
-  const [name, setName] = useState(currentUser.name);
-  const [email, setEmail] = useState(currentUser.email);
-  const [phone, setPhone] = useState(currentUser.phone);
-  const [photo, setPhoto] = useState(currentUser.photo);
+  const { issues } = useContext(IssuesContext);
+  const [name, setName] = useState('Your Name');
+  const [email, setEmail] = useState('your@email.com');
+  const [mobile, setMobile] = useState('1234567890');
 
-  const pickPhoto = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      quality: 1,
-    });
-    if (!result.canceled) setPhoto(result.assets[0].uri);
-  };
-
-  const saveProfile = () => {
-    const updated = { name, email, phone, photo };
-    updateUser(updated);
-    Alert.alert("Saved!", "Profile updated successfully.");
+  const handleSave = () => {
+    alert('Profile Updated!');
   };
 
   return (
     <View style={styles.container}>
-      {/* Profile Photo */}
-      <TouchableOpacity onPress={pickPhoto}>
-        {photo ? (
-          <Image source={{ uri: photo }} style={styles.photo} />
-        ) : (
-          <View style={styles.photoPlaceholder}>
-            <Text style={{ color: "#fff" }}>Add Photo</Text>
-          </View>
-        )}
+      {/* Editable Profile Section */}
+      <Image source={require('../assets/images.jpeg')} style={styles.profileImage} />
+
+      <TextInput style={styles.input} value={name} onChangeText={setName} placeholder="Name" placeholderTextColor="#888" />
+      <TextInput
+        style={styles.input}
+        value={email}
+        onChangeText={setEmail}
+        placeholder="Email"
+        placeholderTextColor="#888"
+        keyboardType="email-address"
+      />
+      <TextInput
+        style={styles.input}
+        value={mobile}
+        onChangeText={setMobile}
+        placeholder="Mobile"
+        placeholderTextColor="#888"
+        keyboardType="phone-pad"
+      />
+
+      <TouchableOpacity style={styles.button} onPress={handleSave}>
+        <Text style={styles.buttonText}>Save Profile</Text>
       </TouchableOpacity>
 
-      {/* Editable Info */}
-      <Text style={styles.label}>Name</Text>
-      <TextInput style={styles.input} value={name} onChangeText={setName} />
+      {/* Divider */}
+      <View style={styles.divider} />
 
-      <Text style={styles.label}>Email</Text>
-      <TextInput style={styles.input} value={email} onChangeText={setEmail} keyboardType="email-address" />
+      {/* Citizen Reported Issues */}
+      <Text style={styles.heading}>My Reported Issues</Text>
 
-      <Text style={styles.label}>Phone</Text>
-      <TextInput style={styles.input} value={phone} onChangeText={setPhone} keyboardType="phone-pad" />
+      {issues.length === 0 ? (
+        <View style={styles.emptyWrap}>
+          <Text style={styles.emptyText}>You haven't reported any issues yet.</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={issues}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={{ paddingBottom: 40 }}
+          renderItem={({ item }) => (
+            <View style={styles.card}>
+              {item.image && <Image source={{ uri: item.image }} style={styles.issueImage} />}
+              <Text style={styles.title}>{item.title}</Text>
+              <Text style={styles.desc}>{item.description}</Text>
+              <Text style={styles.category}>Category: {item.category}</Text>
+              <Text style={styles.status}>Status: {item.status || 'Pending'}</Text>
+              {item.address && <Text style={styles.address}>📍 {item.address}</Text>}
 
-      {/* Save Button */}
-      <TouchableOpacity style={styles.saveButton} onPress={saveProfile}>
-        <Text style={styles.saveText}>Save Profile</Text>
-      </TouchableOpacity>
-
-      {/* My Issues Button */}
-      <TouchableOpacity
-        style={styles.myIssuesButton}
-        onPress={() => navigation.navigate("ViewIssues", { filterUser: true })}
-      >
-        <Text style={styles.myIssuesText}>📋 My Issues</Text>
-      </TouchableOpacity>
+              {item.location && (
+                <TouchableOpacity
+                  style={styles.mapButton}
+                  onPress={() =>
+                    navigation.navigate('MapView', {
+                      title: item.title,
+                      description: item.description,
+                      location: item.location,
+                    })
+                  }
+                >
+                  <Text style={styles.mapButtonText}>View on Map</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          )}
+        />
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: "#fff", alignItems: "center" },
-  label: { fontWeight: "bold", marginTop: 15, alignSelf: "flex-start" },
-  input: { borderWidth: 1, borderColor: "#ccc", borderRadius: 8, padding: 10, width: "100%", marginTop: 5 },
-  photo: { width: 120, height: 120, borderRadius: 60, marginTop: 20 },
-  photoPlaceholder: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    backgroundColor: "#6c63ff",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 20,
-  },
-  saveButton: {
-    backgroundColor: "#28a745",
-    padding: 15,
-    borderRadius: 8,
-    alignItems: "center",
-    marginTop: 30,
-    width: "100%",
-  },
-  saveText: { color: "#fff", fontWeight: "bold", fontSize: 16 },
-  myIssuesButton: {
-    backgroundColor: "#007BFF",
-    padding: 15,
-    borderRadius: 8,
-    alignItems: "center",
-    marginTop: 15,
-    width: "100%",
-  },
-  myIssuesText: { color: "#fff", fontWeight: "bold", fontSize: 16 },
+  container: { flex: 1, backgroundColor: '#121212', padding: 12 },
+  profileImage: { width: 120, height: 120, borderRadius: 60, marginBottom: 15, borderWidth: 2, borderColor: '#6C63FF', alignSelf: 'center' },
+  input: { width: '90%', height: 50, backgroundColor: '#1E1E1E', color: '#fff', borderRadius: 12, paddingHorizontal: 15, marginBottom: 12, fontSize: 16, borderWidth: 1, borderColor: '#333', alignSelf: 'center' },
+  button: { width: '90%', backgroundColor: '#6C63FF', paddingVertical: 15, borderRadius: 12, alignItems: 'center', marginTop: 10, alignSelf: 'center' },
+  buttonText: { color: '#fff', fontSize: 18, fontWeight: '700' },
+  divider: { height: 1, backgroundColor: '#333', marginVertical: 20, width: '90%', alignSelf: 'center' },
+  heading: { fontSize: 22, fontWeight: '700', color: '#fff', marginBottom: 12, textAlign: 'center' },
+  emptyWrap: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  emptyText: { color: '#888', fontSize: 16 },
+  card: { backgroundColor: '#1E1E1E', padding: 14, marginVertical: 8, borderRadius: 12 },
+  issueImage: { width: '100%', height: 160, borderRadius: 12, marginBottom: 10 },
+  title: { fontSize: 18, fontWeight: '700', color: '#fff', marginBottom: 6 },
+  desc: { fontSize: 14, color: '#ccc', marginBottom: 6 },
+  category: { fontSize: 14, color: '#FFD700', marginBottom: 4 },
+  status: { fontSize: 14, color: '#00CED1', marginBottom: 6 },
+  address: { color: '#aaa', fontStyle: 'italic', marginBottom: 6 },
+  mapButton: { backgroundColor: '#6C63FF', paddingVertical: 12, borderRadius: 12, alignItems: 'center', marginTop: 6 },
+  mapButtonText: { color: '#fff', fontWeight: '700', fontSize: 15 },
 });

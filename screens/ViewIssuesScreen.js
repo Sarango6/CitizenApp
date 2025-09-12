@@ -1,97 +1,143 @@
-import { useContext } from "react";
+// screens/ViewIssuesScreen.js
+import { Picker } from "@react-native-picker/picker";
+import { useContext, useState } from "react";
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import MapView, { Marker } from "react-native-maps";
 import { IssuesContext } from "./IssuesContext";
 
-export default function ViewIssuesScreen({ route, navigation }) {
-  const { issues, currentUser } = useContext(IssuesContext);
+export default function ViewIssuesScreen({ navigation }) {
+  const { issues, updateIssueStatus } = useContext(IssuesContext);
+  const [filterCategory, setFilterCategory] = useState("All");
+  const [filterStatus, setFilterStatus] = useState("All");
 
-  // If coming from Profile → show only user’s issues
-  const filterUser = route?.params?.filterUser;
-  const filteredIssues = filterUser
-    ? issues.filter((i) => i.user?.email === currentUser.email)
-    : issues;
+  // Simulated admin flag (replace with real auth later)
+  const isAdmin = true; // set to false for normal citizen
 
-  if (filteredIssues.length === 0) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.empty}>
-          {filterUser ? "You haven’t reported any issues yet." : "No issues reported yet."}
-        </Text>
-      </View>
-    );
-  }
+  // Filter issues based on category and status
+  const filteredIssues = issues.filter(issue => 
+    (filterCategory === "All" || issue.category === filterCategory) &&
+    (filterStatus === "All" || issue.status === filterStatus)
+  );
 
   return (
-    <FlatList
-      style={styles.list}
-      data={filteredIssues}
-      keyExtractor={(item, index) => index.toString()}
-      renderItem={({ item }) => (
-        <View style={styles.card}>
-          {item.image && <Image source={{ uri: item.image }} style={styles.image} />}
-          <Text style={styles.title}>{item.title}</Text>
-          <Text style={styles.desc}>{item.description}</Text>
-          {item.address && <Text style={styles.location}>📍 {item.address}</Text>}
+    <View style={styles.container}>
+      <View style={styles.dropdownContainer}>
+        <Picker
+          selectedValue={filterCategory}
+          dropdownIconColor="#fff"
+          style={styles.dropdown}
+          onValueChange={(val) => setFilterCategory(val)}
+        >
+          <Picker.Item label="All Categories" value="All" />
+          <Picker.Item label="General" value="General" />
+          <Picker.Item label="Pothole" value="Pothole" />
+          <Picker.Item label="Streetlight" value="Streetlight" />
+          <Picker.Item label="Garbage" value="Garbage" />
+          <Picker.Item label="Water Leakage" value="Water Leakage" />
+          <Picker.Item label="Escalated" value="Escalated" /> // in both filter and admin status update
 
-          {item.location && (
-            <>
-              <MapView
-                style={styles.map}
-                initialRegion={{
-                  latitude: item.location.latitude,
-                  longitude: item.location.longitude,
-                  latitudeDelta: 0.005,
-                  longitudeDelta: 0.005,
-                }}
-                scrollEnabled={false}
-                zoomEnabled={false}
-              >
-                <Marker coordinate={item.location} title={item.title} description={item.description} />
-              </MapView>
+        </Picker>
 
-              <TouchableOpacity
-                style={styles.mapButton}
-                onPress={() =>
-                  navigation.navigate("MapView", {
-                    title: item.title,
-                    description: item.description,
-                    location: item.location,
-                  })
-                }
-              >
-                <Text style={styles.mapButtonText}>View on Map</Text>
-              </TouchableOpacity>
-            </>
-          )}
+        <Picker
+          selectedValue={filterStatus}
+          dropdownIconColor="#fff"
+          style={[styles.dropdown, { marginTop: 8 }]}
+          onValueChange={(val) => setFilterStatus(val)}
+        >
+          <Picker.Item label="All Status" value="All" />
+          <Picker.Item label="Pending" value="Pending" />
+          <Picker.Item label="In Progress" value="In Progress" />
+          <Picker.Item label="Resolved" value="Resolved" />
+        </Picker>
+      </View>
+
+      {filteredIssues.length === 0 ? (
+        <View style={styles.emptyWrap}>
+          <Text style={styles.emptyText}>No issues reported yet.</Text>
         </View>
+      ) : (
+        <FlatList
+          data={filteredIssues}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={{ paddingBottom: 40 }}
+          renderItem={({ item }) => (
+            <View style={styles.card}>
+              {item.image && <Image source={{ uri: item.image }} style={styles.image} />}
+              <Text style={styles.title}>{item.title}</Text>
+              <Text style={styles.desc}>{item.description}</Text>
+              <Text style={styles.category}>Category: {item.category}</Text>
+              <Text style={styles.status}>Status: {item.status}</Text>
+              {item.address && <Text style={styles.address}>📍 {item.address}</Text>}
+
+              {item.location && (
+                <TouchableOpacity
+                  style={styles.mapButton}
+                  onPress={() =>
+                    navigation.navigate("MapView", {
+                      title: item.title,
+                      description: item.description,
+                      location: item.location,
+                    })
+                  }
+                >
+                  <Text style={styles.mapButtonText}>View on Map</Text>
+                </TouchableOpacity>
+              )}
+
+              {/* Admin-only status update */}
+              {isAdmin && (
+                <View style={styles.adminRow}>
+                  <Text style={{ color: "#fff", marginRight: 8 }}>Update Status:</Text>
+                  <Picker
+                    selectedValue={item.status}
+                    dropdownIconColor="#fff"
+                    style={styles.statusDropdown}
+                    onValueChange={(val) => updateIssueStatus(item.id, val)}
+                  >
+                    <Picker.Item label="Pending" value="Pending" />
+                    <Picker.Item label="In Progress" value="In Progress" />
+                    <Picker.Item label="Resolved" value="Resolved" />
+                  </Picker>
+                </View>
+              )}
+            </View>
+          )}
+        />
       )}
-    />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#fff" },
-  empty: { fontSize: 18, color: "#666" },
-  list: { flex: 1, backgroundColor: "#fff" },
+  container: { flex: 1, backgroundColor: "#121212", padding: 12 },
+  dropdownContainer: { backgroundColor: "#1E1E1E", borderRadius: 12, marginVertical: 8, padding: 8 },
+  dropdown: { color: "#fff", height: 50 },
+  emptyWrap: { flex: 1, justifyContent: "center", alignItems: "center" },
+  emptyText: { color: "#888", fontSize: 18 },
   card: {
-    backgroundColor: "#f9f9f9",
-    padding: 15,
-    margin: 10,
-    borderRadius: 10,
-    elevation: 3,
+    backgroundColor: "#1E1E1E",
+    padding: 14,
+    marginVertical: 8,
+    borderRadius: 12,
+    shadowColor: "#000",
+    shadowOpacity: 0.3,
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 5,
+    elevation: 5,
   },
-  image: { width: "100%", height: 150, borderRadius: 8, marginBottom: 10 },
-  title: { fontSize: 18, fontWeight: "bold", marginBottom: 5 },
-  desc: { fontSize: 14, color: "#555" },
-  location: { marginTop: 8, fontSize: 13, color: "#333", fontStyle: "italic" },
-  map: { width: "100%", height: 200, borderRadius: 8, marginTop: 10 },
+  image: { width: "100%", height: 160, borderRadius: 12, marginBottom: 10 },
+  title: { fontSize: 18, fontWeight: "700", color: "#fff", marginBottom: 6 },
+  desc: { fontSize: 14, color: "#ccc", marginBottom: 6 },
+  category: { fontSize: 14, color: "#FFD700", marginBottom: 6 },
+  status: { fontSize: 14, color: "#00CED1", marginBottom: 6 },
+  address: { color: "#aaa", fontStyle: "italic", marginBottom: 6 },
   mapButton: {
-    backgroundColor: "#007BFF",
-    padding: 10,
-    borderRadius: 8,
+    backgroundColor: "#6C63FF",
+    paddingVertical: 12,
+    borderRadius: 12,
     alignItems: "center",
-    marginTop: 10,
+    marginTop: 6,
   },
-  mapButtonText: { color: "#fff", fontWeight: "bold" },
+  mapButtonText: { color: "#fff", fontWeight: "700", fontSize: 15 },
+  adminRow: { flexDirection: "row", alignItems: "center", marginTop: 10 },
+  statusDropdown: { color: "#fff", height: 40, flex: 1 },
 });
