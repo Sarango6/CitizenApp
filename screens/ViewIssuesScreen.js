@@ -20,10 +20,10 @@ export default function ViewIssuesScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.dropdownContainer}>
+      <View style={styles.dropdownContainer1}>
         <Picker
           selectedValue={filterCategory}
-          dropdownIconColor="#fff"
+          dropdownIconColor="#000"
           style={styles.dropdown}
           onValueChange={(val) => setFilterCategory(val)}
         >
@@ -36,10 +36,13 @@ export default function ViewIssuesScreen({ navigation }) {
           <Picker.Item label="Escalated" value="Escalated" /> // in both filter and admin status update
 
         </Picker>
+      </View>
 
+
+      <View style={styles.dropdownContainer2}>
         <Picker
           selectedValue={filterStatus}
-          dropdownIconColor="#fff"
+          dropdownIconColor="#000"
           style={[styles.dropdown, { marginTop: 8 }]}
           onValueChange={(val) => setFilterStatus(val)}
         >
@@ -83,22 +86,8 @@ export default function ViewIssuesScreen({ navigation }) {
                 </TouchableOpacity>
               )}
 
-              {/* Admin-only status update */}
-              {isAdmin && (
-                <View style={styles.adminRow}>
-                  <Text style={{ color: "#fff", marginRight: 8 }}>Update Status:</Text>
-                  <Picker
-                    selectedValue={item.status}
-                    dropdownIconColor="#fff"
-                    style={styles.statusDropdown}
-                    onValueChange={(val) => updateIssueStatus(item.id, val)}
-                  >
-                    <Picker.Item label="Pending" value="Pending" />
-                    <Picker.Item label="In Progress" value="In Progress" />
-                    <Picker.Item label="Resolved" value="Resolved" />
-                  </Picker>
-                </View>
-              )}
+             
+              
             </View>
           )}
         />
@@ -108,36 +97,47 @@ export default function ViewIssuesScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#121212", padding: 12 },
-  dropdownContainer: { backgroundColor: "#1E1E1E", borderRadius: 12, marginVertical: 8, padding: 8 },
-  dropdown: { color: "#fff", height: 50 },
+  container: { flex: 1, backgroundColor: "#23D5D5", padding: 12},
+  dropdownContainer1: { backgroundColor: "#fff", borderRadius: 20, marginVertical: 5, padding: 5, borderWidth : 1, borderColor: "#333", height: 60},
+  dropdownContainer2: { 
+    backgroundColor: "#fff",
+    borderRadius: 20, 
+    marginVertical: 5,
+    padding: 5,
+    borderWidth : 1,
+    borderColor: "#333",
+    height: 60,
+    
+  },
+  dropdown: { color: "#000", height: 60,},
   emptyWrap: { flex: 1, justifyContent: "center", alignItems: "center" },
   emptyText: { color: "#888", fontSize: 18 },
   card: {
-    backgroundColor: "#1E1E1E",
+    backgroundColor: "#000",
     padding: 14,
-    marginVertical: 8,
+    marginVertical: 20,
     borderRadius: 12,
     shadowColor: "#000",
     shadowOpacity: 0.3,
-    shadowOffset: { width: 0, height: 3 },
+    shadowOffset: { width: 1, height: 3 },
     shadowRadius: 5,
-    elevation: 5,
+    elevation: 8,
+    borderWidth : 1,
+    borderColor : "#333"
+
   },
   image: { width: "100%", height: 160, borderRadius: 12, marginBottom: 10 },
-  title: { fontSize: 18, fontWeight: "700", color: "#fff", marginBottom: 6 },
-  desc: { fontSize: 14, color: "#ccc", marginBottom: 6 },
-  category: { fontSize: 14, color: "#FFD700", marginBottom: 6 },
-  status: { fontSize: 14, color: "#00CED1", marginBottom: 6 },
-  address: { color: "#aaa", fontStyle: "italic", marginBottom: 6 },
+  title: { fontSize: 24, fontWeight: "700", color: "#fff", marginBottom: 6},
+  desc: { fontSize: 14, color: "#fff",fontStyle:"times new roman", marginBottom: 6 },
+  category: { fontSize: 16, color: "#FFD700", marginBottom: 6 },
+  status: { fontSize: 16, color: "#00CED1", marginBottom: 6 },
+  address: { color: "#f77f7fff", fontStyle: "normal", marginBottom: 6 },
   mapButton: {
-    backgroundColor: "#6C63FF",
+    backgroundColor: "#fff",
     paddingVertical: 12,
     borderRadius: 12,
     alignItems: "center",
     marginTop: 6,
   },
-  mapButtonText: { color: "#fff", fontWeight: "700", fontSize: 15 },
-  adminRow: { flexDirection: "row", alignItems: "center", marginTop: 10 },
-  statusDropdown: { color: "#fff", height: 40, flex: 1 },
+  mapButtonText: { color: "#000", fontWeight: "700", fontSize: 15 },
 });

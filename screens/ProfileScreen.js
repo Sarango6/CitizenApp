@@ -5,9 +5,9 @@ import { IssuesContext } from './IssuesContext';
 
 export default function ProfileScreen({ navigation }) {
   const { issues } = useContext(IssuesContext);
-  const [name, setName] = useState('Your Name');
-  const [email, setEmail] = useState('your@email.com');
-  const [mobile, setMobile] = useState('1234567890');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [mobile, setMobile] = useState('');
 
   const handleSave = () => {
     alert('Profile Updated!');
@@ -16,7 +16,7 @@ export default function ProfileScreen({ navigation }) {
   return (
     <View style={styles.container}>
       {/* Editable Profile Section */}
-      <Image source={require('../assets/images.jpeg')} style={styles.profileImage} />
+      <Image source={require('../assets/images/react-logo.png')} style={styles.profileImage} />
 
       <TextInput style={styles.input} value={name} onChangeText={setName} placeholder="Name" placeholderTextColor="#888" />
       <TextInput
@@ -87,10 +87,10 @@ export default function ProfileScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#121212', padding: 12 },
-  profileImage: { width: 120, height: 120, borderRadius: 60, marginBottom: 15, borderWidth: 2, borderColor: '#6C63FF', alignSelf: 'center' },
-  input: { width: '90%', height: 50, backgroundColor: '#1E1E1E', color: '#fff', borderRadius: 12, paddingHorizontal: 15, marginBottom: 12, fontSize: 16, borderWidth: 1, borderColor: '#333', alignSelf: 'center' },
-  button: { width: '90%', backgroundColor: '#6C63FF', paddingVertical: 15, borderRadius: 12, alignItems: 'center', marginTop: 10, alignSelf: 'center' },
+  container: { flex: 1, backgroundColor: '#23D5D5', padding: 12 },
+  profileImage: { width: 120, height: 120, borderRadius: 60, marginBottom: 15, borderWidth: 2, borderColor: '#000', alignSelf: 'center', backgroundColor: "#fff" },
+  input: { width: '90%', height: 50, backgroundColor: '#fff', color: '#000', borderRadius: 12, paddingHorizontal: 15, marginBottom: 12, fontSize: 16, borderWidth: 1, borderColor: '#333', alignSelf: 'center' },
+  button: { width: '90%', backgroundColor: '#000', paddingVertical: 15, borderRadius: 12, alignItems: 'center', marginTop: 10, alignSelf: 'center' },
   buttonText: { color: '#fff', fontSize: 18, fontWeight: '700' },
   divider: { height: 1, backgroundColor: '#333', marginVertical: 20, width: '90%', alignSelf: 'center' },
   heading: { fontSize: 22, fontWeight: '700', color: '#fff', marginBottom: 12, textAlign: 'center' },
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
   desc: { fontSize: 14, color: '#ccc', marginBottom: 6 },
   category: { fontSize: 14, color: '#FFD700', marginBottom: 4 },
   status: { fontSize: 14, color: '#00CED1', marginBottom: 6 },
-  address: { color: '#aaa', fontStyle: 'italic', marginBottom: 6 },
-  mapButton: { backgroundColor: '#6C63FF', paddingVertical: 12, borderRadius: 12, alignItems: 'center', marginTop: 6 },
-  mapButtonText: { color: '#fff', fontWeight: '700', fontSize: 15 },
+  address: { color: '#f77f7fff', marginBottom: 6 },
+  mapButton: { backgroundColor: '#fff', paddingVertical: 12, borderRadius: 12, alignItems: 'center', marginTop: 6 },
+  mapButtonText: { color: '#000', fontWeight: '700', fontSize: 15 },
 });

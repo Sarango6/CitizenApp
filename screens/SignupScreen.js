@@ -1,4 +1,3 @@
-// screens/SignupScreen.js
 import { useState } from "react";
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
@@ -12,19 +11,20 @@ export default function SignupScreen({ navigation }) {
       Alert.alert("Error", "Please fill all fields");
       return;
     }
-    // Later connect to backend
-    Alert.alert("Success", `Account created for ${name}`);
-    navigation.navigate("Login"); // Go back to Login after signup
+
+    // Mock signup success
+    Alert.alert("Success", "Account created successfully!");
+    navigation.navigate("Login");
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Signup</Text>
+      <Text style={styles.title}>SINGUP</Text>
 
       <TextInput
         style={styles.input}
         placeholder="Full Name"
-        placeholderTextColor="#888"
+        placeholderTextColor="#dad7d7db"
         value={name}
         onChangeText={setName}
       />
@@ -32,7 +32,7 @@ export default function SignupScreen({ navigation }) {
       <TextInput
         style={styles.input}
         placeholder="Email"
-        placeholderTextColor="#888"
+        placeholderTextColor="#dad7d7db"
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
@@ -41,7 +41,7 @@ export default function SignupScreen({ navigation }) {
       <TextInput
         style={styles.input}
         placeholder="Password"
-        placeholderTextColor="#888"
+        placeholderTextColor="#dad7d7db"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
@@ -61,35 +61,35 @@ export default function SignupScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#121212",
+    backgroundColor: "#23D5D5",
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "left",
     padding: 20,
   },
   title: {
-    fontSize: 32,
+    fontSize: 50,
     fontWeight: "800",
     color: "#fff",
-    marginBottom: 30,
+    marginBottom: 40,
     textAlign: "center",
-    textShadowColor: "rgba(0,0,0,0.5)",
-    textShadowOffset: { width: 2, height: 2 },
-    textShadowRadius: 4,
+    textShadowColor: "#000",
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 5,
   },
   input: {
     width: "100%",
     height: 50,
-    backgroundColor: "#1E1E1E",
+    backgroundColor: "#0009",
     color: "#fff",
     borderRadius: 12,
     paddingHorizontal: 15,
     marginBottom: 15,
     fontSize: 16,
     borderWidth: 1,
-    borderColor: "#333",
+    borderColor: "#fff",
   },
   button: {
-    backgroundColor: "#6C63FF",
+    backgroundColor: "#fff",
     padding: 15,
     borderRadius: 12,
     width: "100%",
@@ -102,12 +102,12 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
   },
   buttonText: {
-    color: "#fff",
+    color: "#000",
     fontSize: 18,
     fontWeight: "700",
   },
   link: {
-    color: "#6C63FF",
+    color: "#000",
     marginTop: 20,
     fontSize: 15,
   },

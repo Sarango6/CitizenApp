@@ -1,5 +1,6 @@
 // screens/ReportIssueScreen.js
 // No major changes needed here, just the `status` will be automatically added via IssuesContext.
+import { Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";
 import * as Location from "expo-location";
@@ -95,32 +96,37 @@ export default function ReportIssueScreen({ navigation }) {
       <View style={styles.dropdownContainer}>
         <Picker
           selectedValue={category}
-          dropdownIconColor="#fff"
+          dropdownIconColor="#000"
           style={styles.dropdown}
           onValueChange={(val) => setCategory(val)}
         >
-          <Picker.Item label="General" value="General" />
+          <Picker.Item label="Catagory" value="catagory" />
           <Picker.Item label="Pothole" value="Pothole" />
           <Picker.Item label="Streetlight" value="Streetlight" />
           <Picker.Item label="Garbage" value="Garbage" />
           <Picker.Item label="Water Leakage" value="Water Leakage" />
+          <Picker.Item label="Other" value="Other" />
         </Picker>
       </View>
 
       <View style={styles.row}>
         <TouchableOpacity style={styles.secondary} onPress={pickImage}>
+          <Ionicons name="albums-outline" size={22} color="#000" />
           <Text style={styles.secondaryText}>Pick Image</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.secondaryAlt} onPress={takePhoto}>
+          <Ionicons name="camera-outline" size={22} color="#000" />
           <Text style={styles.secondaryText}>Take Photo</Text>
         </TouchableOpacity>
       </View>
 
       {image && <Image source={{ uri: image }} style={styles.preview} />}
 
-      <TouchableOpacity style={styles.tertiary} onPress={fetchLocation}>
+      <TouchableOpacity style={[styles.tertiary, { flexDirection: "row", alignItems: "center", justifyContent: "center" }]} onPress={fetchLocation}>
+        <Ionicons name="location" size={22} color="#000" />
         <Text style={styles.tertiaryText}>Get Current Location</Text>
       </TouchableOpacity>
+
       {address ? <Text style={styles.address}>{address}</Text> : null}
 
       {coords && (
@@ -152,11 +158,11 @@ export default function ReportIssueScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#121212", padding: 16 },
-  heading: { fontSize: 24, fontWeight: "700", color: "#fff", marginBottom: 16, textAlign: "center" },
+  container: { flex: 1, backgroundColor: "#23D5D5", padding: 16 },
+  heading: { fontSize: 24, fontWeight: "700", color: "#fff", marginBottom: 16, textAlign: "center",},
   input: {
-    backgroundColor: "#1E1E1E",
-    color: "#fff",
+    backgroundColor: "#fff",
+    color: "#000",
     padding: 12,
     borderRadius: 12,
     marginVertical: 8,
@@ -164,17 +170,17 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#333",
   },
-  dropdownContainer: { backgroundColor: "#1E1E1E", borderRadius: 12, marginVertical: 8 },
-  dropdown: { color: "#fff", height: 50 },
+  dropdownContainer: { backgroundColor: "#fff", borderRadius: 12, marginVertical: 8 ,borderWidth : 1, borderColor: "#333"},
+  dropdown: { color: "#000", height: 60 },
   row: { flexDirection: "row", justifyContent: "space-between", marginTop: 10 },
-  secondary: { flex: 1, margin: 4, backgroundColor: "#6C63FF", padding: 14, borderRadius: 12, alignItems: "center" },
-  secondaryAlt: { flex: 1, margin: 4, backgroundColor: "#0096FF", padding: 14, borderRadius: 12, alignItems: "center" },
-  secondaryText: { color: "#fff", fontWeight: "700", fontSize: 16 },
-  preview: { width: "100%", height: 160, borderRadius: 12, marginTop: 12 },
-  tertiary: { backgroundColor: "#FFAA00", padding: 14, borderRadius: 12, alignItems: "center", marginTop: 12 },
-  tertiaryText: { color: "#fff", fontWeight: "700", fontSize: 16 },
-  address: { backgroundColor: "#1E1E1E", color: "#fff", marginTop: 10, padding: 10, borderRadius: 12, fontStyle: "italic", fontSize: 14, textAlign: "center" },
-  map: { width: "100%", height: 200, borderRadius: 12, marginTop: 12 },
-  primary: { backgroundColor: "#28A745", padding: 16, borderRadius: 12, alignItems: "center", marginTop: 18 },
-  primaryText: { color: "#fff", fontWeight: "700", fontSize: 16 },
+  secondary: { flex: 1, margin: 4, backgroundColor: "#fff", padding: 14, borderRadius: 50, alignItems: "center", borderWidth : 1, borderColor: "#333"},
+  secondaryAlt: { flex: 1, margin: 4, backgroundColor: "#fff", padding: 14, borderRadius: 50, alignItems: "center", borderWidth : 1, borderColor: "#333" },
+  secondaryText: { color: "#000", fontWeight: "700", fontSize: 16 },
+  preview: { width: "100%", height: 280, borderRadius: 12, marginTop: 12, borderWidth : 1, borderColor: "#333" },
+  tertiary: { backgroundColor: "#fff", padding: 14, borderRadius: 12, alignItems: "center", marginTop: 12, borderWidth : 1, borderColor: "#333"  },
+  tertiaryText: { color: "#000", fontWeight: "700", fontSize: 16 },
+  address: { backgroundColor: "#fff", color: "#000", marginTop: 10, padding: 10, borderRadius: 12, fontStyle: "times new roman", fontSize: 14, textAlign: "left", borderWidth : 1, borderColor: "#333" },
+  map: { width: "100%", height: 200, borderRadius: 12, marginTop: 12, borderWidth : 1, borderColor: "#333" },
+  primary: { backgroundColor: "#fff", padding: 16, borderRadius: 12, alignItems: "center", marginTop: 18, borderWidth : 1, borderColor: "#333"  },
+  primaryText: { color: "#000", fontWeight: "700", fontSize: 16 },
 });

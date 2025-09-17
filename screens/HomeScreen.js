@@ -17,7 +17,7 @@ export default function HomeScreen({ navigation }) {
 
       {/* Center Content */}
       <View style={styles.center}>
-        <Text style={styles.title}>Citizen Issue App</Text>
+        <Text style={styles.title}>Citizen Issue App </Text>
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity
@@ -52,7 +52,7 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#121212', // dark background
+    backgroundColor: '#23D5D5',
   },
   topRow: {
     height: 80,
@@ -62,9 +62,9 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   profileButton: {
-    backgroundColor: "#6C63FF",
+    backgroundColor: "#000",
     padding: 10,
-    borderRadius: 50,
+    borderRadius: 10,
     elevation: 8,
     shadowColor: "#000",
     shadowOpacity: 0.3,
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 25,
+    paddingHorizontal: 55,
   },
   title: {
     fontSize: 34,
@@ -103,17 +103,17 @@ const styles = StyleSheet.create({
     elevation: 6,
     shadowColor: "#000",
     shadowOpacity: 0.25,
-    shadowOffset: { width: 0, height: 5 },
-    shadowRadius: 6,
+    shadowOffset: { width: 1, height: 5 },
+    shadowRadius: 10,
   },
   reportButton: {
-    backgroundColor: "#6C63FF",
+    backgroundColor: "#000",
   },
   viewButton: {
-    backgroundColor: "#00C853",
+    backgroundColor: "#000",
   },
   logoutButton: {
-    backgroundColor: "#D32F2F",
+    backgroundColor: "#000",
   },
   buttonText: {
     color: "#fff",
