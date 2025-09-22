@@ -1,7 +1,7 @@
 // screens/ViewIssuesScreen.js
 import { Picker } from "@react-native-picker/picker";
 import { useContext, useState } from "react";
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { IssuesContext } from "./IssuesContext";
 
 export default function ViewIssuesScreen({ navigation }) {
@@ -12,104 +12,119 @@ export default function ViewIssuesScreen({ navigation }) {
   // Simulated admin flag (replace with real auth later)
   const isAdmin = true; // set to false for normal citizen
 
-  // Filter issues based on category and status
-  const filteredIssues = issues.filter(issue => 
-    (filterCategory === "All" || issue.category === filterCategory) &&
-    (filterStatus === "All" || issue.status === filterStatus)
+  // Filter issues
+  const filteredIssues = issues.filter(
+    (issue) =>
+      (filterCategory === "All" || issue.category === filterCategory) &&
+      (filterStatus === "All" || issue.status === filterStatus)
   );
 
   return (
-    <View style={styles.container}>
-      <View style={styles.dropdownContainer1}>
-        <Picker
-          selectedValue={filterCategory}
-          dropdownIconColor="#000"
-          style={styles.dropdown}
-          onValueChange={(val) => setFilterCategory(val)}
-        >
-          <Picker.Item label="All Categories" value="All" />
-          <Picker.Item label="General" value="General" />
-          <Picker.Item label="Pothole" value="Pothole" />
-          <Picker.Item label="Streetlight" value="Streetlight" />
-          <Picker.Item label="Garbage" value="Garbage" />
-          <Picker.Item label="Water Leakage" value="Water Leakage" />
-          <Picker.Item label="Escalated" value="Escalated" /> // in both filter and admin status update
-
-        </Picker>
-      </View>
-
-
-      <View style={styles.dropdownContainer2}>
-        <Picker
-          selectedValue={filterStatus}
-          dropdownIconColor="#000"
-          style={[styles.dropdown, { marginTop: 8 }]}
-          onValueChange={(val) => setFilterStatus(val)}
-        >
-          <Picker.Item label="All Status" value="All" />
-          <Picker.Item label="Pending" value="Pending" />
-          <Picker.Item label="In Progress" value="In Progress" />
-          <Picker.Item label="Resolved" value="Resolved" />
-        </Picker>
-      </View>
-
-      {filteredIssues.length === 0 ? (
-        <View style={styles.emptyWrap}>
-          <Text style={styles.emptyText}>No issues reported yet.</Text>
+    <ImageBackground
+      source={require("../assets/remain_bg.jpg")} // put your image in assets folder
+      style={styles.bg}
+      resizeMode="cover"
+    >
+      <View style={styles.overlay}>
+        <View style={styles.dropdownContainer1}>
+          <Picker
+            selectedValue={filterCategory}
+            dropdownIconColor="#000"
+            style={styles.dropdown}
+            onValueChange={(val) => setFilterCategory(val)}
+          >
+            <Picker.Item label="All Categories" value="All" />
+            <Picker.Item label="General" value="General" />
+            <Picker.Item label="Pothole" value="Pothole" />
+            <Picker.Item label="Streetlight" value="Streetlight" />
+            <Picker.Item label="Garbage" value="Garbage" />
+            <Picker.Item label="Water Leakage" value="Water Leakage" />
+            <Picker.Item label="Escalated" value="Escalated" />
+          </Picker>
         </View>
-      ) : (
-        <FlatList
-          data={filteredIssues}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={{ paddingBottom: 40 }}
-          renderItem={({ item }) => (
-            <View style={styles.card}>
-              {item.image && <Image source={{ uri: item.image }} style={styles.image} />}
-              <Text style={styles.title}>{item.title}</Text>
-              <Text style={styles.desc}>{item.description}</Text>
-              <Text style={styles.category}>Category: {item.category}</Text>
-              <Text style={styles.status}>Status: {item.status}</Text>
-              {item.address && <Text style={styles.address}>📍 {item.address}</Text>}
 
-              {item.location && (
-                <TouchableOpacity
-                  style={styles.mapButton}
-                  onPress={() =>
-                    navigation.navigate("MapView", {
-                      title: item.title,
-                      description: item.description,
-                      location: item.location,
-                    })
-                  }
-                >
-                  <Text style={styles.mapButtonText}>View on Map</Text>
-                </TouchableOpacity>
-              )}
+        <View style={styles.dropdownContainer2}>
+          <Picker
+            selectedValue={filterStatus}
+            dropdownIconColor="#000"
+            style={[styles.dropdown, { marginTop: 8 }]}
+            onValueChange={(val) => setFilterStatus(val)}
+          >
+            <Picker.Item label="All Status" value="All" />
+            <Picker.Item label="Pending" value="Pending" />
+            <Picker.Item label="In Progress" value="In Progress" />
+            <Picker.Item label="Resolved" value="Resolved" />
+          </Picker>
+        </View>
 
-             
-              
-            </View>
-          )}
-        />
-      )}
-    </View>
+        {filteredIssues.length === 0 ? (
+          <View style={styles.emptyWrap}>
+            <Text style={styles.emptyText}>No issues reported yet.</Text>
+          </View>
+        ) : (
+          <FlatList
+            data={filteredIssues}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={{ paddingBottom: 40 }}
+            renderItem={({ item }) => (
+              <View style={styles.card}>
+                {item.image && (
+                  <Image source={{ uri: item.image }} style={styles.image} />
+                )}
+                <Text style={styles.title}>{item.title}</Text>
+                <Text style={styles.desc}>{item.description}</Text>
+                <Text style={styles.category}>Category: {item.category}</Text>
+                <Text style={styles.status}>Status: {item.status}</Text>
+                {item.address && (
+                  <Text style={styles.address}>📍 {item.address}</Text>
+                )}
+
+                {item.location && (
+                  <TouchableOpacity
+                    style={styles.mapButton}
+                    onPress={() =>
+                      navigation.navigate("MapView", {
+                        title: item.title,
+                        description: item.description,
+                        location: item.location,
+                      })
+                    }
+                  >
+                    <Text style={styles.mapButtonText}>View on Map</Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            )}
+          />
+        )}
+      </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#23D5D5", padding: 12},
-  dropdownContainer1: { backgroundColor: "#fff", borderRadius: 20, marginVertical: 5, padding: 5, borderWidth : 1, borderColor: "#333", height: 60},
-  dropdownContainer2: { 
+  bg: { flex: 1, width: "100%", height: "100%" },
+  overlay: { flex: 1, padding: 12 },
+
+  dropdownContainer1: {
     backgroundColor: "#fff",
-    borderRadius: 20, 
+    borderRadius: 20,
     marginVertical: 5,
     padding: 5,
-    borderWidth : 1,
+    borderWidth: 1,
     borderColor: "#333",
     height: 60,
-    
   },
-  dropdown: { color: "#000", height: 60,},
+  dropdownContainer2: {
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    marginVertical: 5,
+    padding: 5,
+    borderWidth: 1,
+    borderColor: "#333",
+    height: 60,
+  },
+  dropdown: { color: "#000", height: 60 },
   emptyWrap: { flex: 1, justifyContent: "center", alignItems: "center" },
   emptyText: { color: "#888", fontSize: 18 },
   card: {
@@ -122,13 +137,12 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 1, height: 3 },
     shadowRadius: 5,
     elevation: 8,
-    borderWidth : 1,
-    borderColor : "#333"
-
+    borderWidth: 1,
+    borderColor: "#333",
   },
   image: { width: "100%", height: 160, borderRadius: 12, marginBottom: 10 },
-  title: { fontSize: 24, fontWeight: "700", color: "#fff", marginBottom: 6},
-  desc: { fontSize: 14, color: "#fff",fontStyle:"times new roman", marginBottom: 6 },
+  title: { fontSize: 24, fontWeight: "700", color: "#fff", marginBottom: 6 },
+  desc: { fontSize: 14, color: "#fff", marginBottom: 6 },
   category: { fontSize: 16, color: "#FFD700", marginBottom: 6 },
   status: { fontSize: 16, color: "#00CED1", marginBottom: 6 },
   address: { color: "#f77f7fff", fontStyle: "normal", marginBottom: 6 },

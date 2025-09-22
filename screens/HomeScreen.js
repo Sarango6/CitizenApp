@@ -1,30 +1,24 @@
 // screens/HomeScreen.js
 import { Ionicons } from "@expo/vector-icons";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function HomeScreen({ navigation }) {
   return (
-    <View style={styles.container}>
-      {/* Top Profile Button */}
-      <View style={styles.topRow}>
-        <TouchableOpacity
-          style={styles.profileButton}
-          onPress={() => navigation.navigate("Profile")}
-        >
-          <Ionicons name="person-circle-outline" size={38} color="#fff" />
-        </TouchableOpacity>
-      </View>
-
+    <ImageBackground
+      source={require("../assets/homescreen_bg.jpg")} // 👈 replace with your image path
+      style={styles.container}
+      resizeMode="cover"
+    >
       {/* Center Content */}
       <View style={styles.center}>
-        <Text style={styles.title}>Citizen Issue App </Text>
+        <Text style={styles.title}></Text>
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={[styles.button, styles.reportButton]}
             onPress={() => navigation.navigate("ReportIssue")}
           >
-            <Ionicons name="camera-outline" size={22} color="#fff" />
+            <Ionicons name="camera-outline" size={22} color="#000" />
             <Text style={styles.buttonText}>Report an Issue</Text>
           </TouchableOpacity>
 
@@ -32,7 +26,7 @@ export default function HomeScreen({ navigation }) {
             style={[styles.button, styles.viewButton]}
             onPress={() => navigation.navigate("ViewIssues")}
           >
-            <Ionicons name="list-outline" size={22} color="#fff" />
+            <Ionicons name="list-outline" size={22} color="#000" />
             <Text style={styles.buttonText}>View Issues</Text>
           </TouchableOpacity>
 
@@ -40,36 +34,28 @@ export default function HomeScreen({ navigation }) {
             style={[styles.button, styles.logoutButton]}
             onPress={() => navigation.replace("Login")}
           >
-            <Ionicons name="log-out-outline" size={22} color="#fff" />
+            <Ionicons name="log-out-outline" size={22} color="#000" />
             <Text style={styles.buttonText}>Logout</Text>
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+
+      {/* Bottom Profile Button */}
+      <View style={styles.bottomRow}>
+        <TouchableOpacity
+          style={styles.profileButton}
+          onPress={() => navigation.navigate("Profile")}
+        >
+          <Ionicons name="person-circle-outline" size={38} color="#000" />
+        </TouchableOpacity>
+      </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#23D5D5',
-  },
-  topRow: {
-    height: 80,
-    justifyContent: "center",
-    alignItems: "flex-start",
-    paddingHorizontal: 20,
-    marginTop: 20,
-  },
-  profileButton: {
-    backgroundColor: "#000",
-    padding: 10,
-    borderRadius: 10,
-    elevation: 8,
-    shadowColor: "#000",
-    shadowOpacity: 0.3,
-    shadowOffset: { width: 0, height: 4 },
-    shadowRadius: 6,
   },
   center: {
     flex: 1,
@@ -101,24 +87,40 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: "center",
     elevation: 6,
-    shadowColor: "#000",
+    shadowColor: "#fff",
     shadowOpacity: 0.25,
     shadowOffset: { width: 1, height: 5 },
     shadowRadius: 10,
   },
   reportButton: {
-    backgroundColor: "#000",
+    backgroundColor: "#fff",
   },
   viewButton: {
-    backgroundColor: "#000",
+    backgroundColor: "#fff",
   },
   logoutButton: {
-    backgroundColor: "#000",
+    backgroundColor: "#fff",
   },
   buttonText: {
-    color: "#fff",
+    color: "#000",
     fontSize: 18,
     fontWeight: "700",
     marginLeft: 12,
+  },
+  bottomRow: {
+    height: 100,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  profileButton: {
+    backgroundColor: "#fff",
+    padding: 10,
+    borderRadius: 10,
+    elevation: 8,
+    shadowColor: "#000",
+    shadowOpacity: 0.3,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 6,
   },
 });
